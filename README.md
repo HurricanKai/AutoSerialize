@@ -15,6 +15,7 @@ Auto Serialize Anything
 
 
 ![Benchmark](https://github.com/HurricanKai/AutoSerialize/blob/master/AutoSerialize.Benchmark.AutoSerializeVsDotNetSerialize-barplot.png)
+(Right AutoSerialize, Left `[Serializable]` with .Nets `BinaryFormatter`
 
 # Usage
 See AutoSerialize.Example
