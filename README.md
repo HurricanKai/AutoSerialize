@@ -12,6 +12,8 @@ Auto Serialize Anything
 |        DotNet |  100 |  1,258.465 us | 12.0459 us | 11.2677 us |    6 |
 | **AutoSerialize** | **1000** |  **2,230.973 us** | **13.4219 us** | **12.5548 us** |    **7** |
 |        DotNet | 1000 | 12,461.599 us | 66.0460 us | 61.7795 us |    8 |
+
+
 ![Benchmark](https://github.com/HurricanKai/AutoSerialize/blob/master/AutoSerialize.Benchmark.AutoSerializeVsDotNetSerialize-barplot.png)
 
 # Usage
