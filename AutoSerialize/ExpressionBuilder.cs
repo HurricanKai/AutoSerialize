@@ -11,6 +11,21 @@ namespace AutoSerialize
 {
     public static class ExpressionBuilder
     {
+        private static Type _arrayHeadNumericTypeAccessor;
+        public static Type ArrayHeadNumericType
+        {
+            private get { return _arrayHeadNumericTypeAccessor; }
+            set
+            {
+                _arrayHeadNumericTypeAccessor = typeof(ITypeAccessor<>).MakeGenericType(value);
+            }
+        }
+
+        static ExpressionBuilder()
+        {
+            ArrayHeadNumericType = typeof(Int32);
+        }
+
         public static Action<Stream, Object> BuildWrite(Type t, IServiceProvider provider)
         {
             Log($"Building Write of {t.Name}");
@@ -59,8 +74,8 @@ namespace AutoSerialize
                     if (leftOverDataAttribute == null)
                     {
                         // Write Length as Int32
-                        expressions.Add(Expression.Call(Expression.Constant(provider.GetService<ITypeAccessor<Int32>>()),
-                            typeof(ITypeAccessor<Int32>).GetMethod("Write"), inputStream,
+                        expressions.Add(Expression.Call(Expression.Constant(provider.GetService(_arrayHeadNumericTypeAccessor)),
+                            _arrayHeadNumericTypeAccessor.GetMethod("Write"), inputStream,
                             Expression.Property(
                                 Expression.ConvertChecked(
                                     Expression.Call(Expression.Constant(field), typeof(FieldInfo).GetMethod("GetValue"),
@@ -167,8 +182,8 @@ namespace AutoSerialize
                         usedSerializerType.GetMethod("ReadArray"),
                         // First Parameter: the inputStream
                         inputStream,
-                        Expression.Call(Expression.Constant(provider.GetService<ITypeAccessor<Int32>>()),
-                            typeof(ITypeAccessor<Int32>).GetMethod("Read"), inputStream));
+                        Expression.Call(Expression.Constant(provider.GetService(_arrayHeadNumericTypeAccessor)),
+                            _arrayHeadNumericTypeAccessor.GetMethod("Read"), inputStream));
                 if (!isArray) // TODO: Array Multihop
                     for (var i = converterTypes.Count - 1; i >= 0; i--)
                         readExpression = Expression.ConvertChecked(readExpression, converterTypes[i]);
