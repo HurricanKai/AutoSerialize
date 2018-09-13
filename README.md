@@ -1,6 +1,6 @@
 # AutoSerialize
 Auto Serialize Anything
-
+Supports Enums, Arrays, Custom Types, Multi-hop Conversions, meaning One Int Enum to another Int enum, without any custom code
 # Benchmarks
 |        Method |    N |          Mean |      Error |     StdDev | Rank |
 |-------------- |----- |--------------:|-----------:|-----------:|-----:|
