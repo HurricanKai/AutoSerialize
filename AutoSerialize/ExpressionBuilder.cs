@@ -26,6 +26,23 @@ namespace AutoSerialize
             ArrayHeadNumericType = typeof(Int32);
         }
 
+        public static bool TryDeserialize<T>(T m, out T result) { result = m; return true; }
+
+        public static Func<object, object[], object> DoThing(MethodInfo info)
+        {
+            var instance = Expression.Parameter(typeof(object), "instance");
+            var parameterInstruction = Expression.Parameter(typeof(object[]), "params");
+
+            var infoParams = info.GetParameters();
+            var parameters = new Expression[infoParams.Length];
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                parameters[i] = Expression.ArrayIndex(parameterInstruction, Expression.Constant(i));
+            }
+
+            return Expression.Lambda<Func<object, object[], object>>(Expression.Call(instance, info, parameters), instance, parameterInstruction).Compile();
+        }
+
         public static Action<Stream, Object> BuildWrite(Type t, IServiceProvider provider)
         {
             Log($"Building Write of {t.Name}");
@@ -52,7 +69,6 @@ namespace AutoSerialize
                     Log($"PreSerialize {preSerialize.Writing}");
                     expressions.Add(Expression.Call(Expression.Convert(inputObject, t), t.GetMethod(preSerialize.Writing)));
                 }
-
                 Expression writeExpression =
                     // The Convert above because GetValue returns object
                     // Second Parameter: the value of this field of the inputObject
@@ -70,8 +86,9 @@ namespace AutoSerialize
 
                 if (isArray)
                 {
+                    var noLengthAtt = field.GetCustomAttribute<NoLengthAttribute>();
                     var leftOverDataAttribute = field.GetCustomAttribute<LeftOverDataAttribute>();
-                    if (leftOverDataAttribute == null)
+                    if (leftOverDataAttribute == null && noLengthAtt == null)
                     {
                         // Write Length as Int32
                         expressions.Add(Expression.Call(Expression.Constant(provider.GetService(_arrayHeadNumericTypeAccessor)),
@@ -99,7 +116,7 @@ namespace AutoSerialize
         private static void Log(string s)
         {
 #if DEBUG
-            Console.WriteLine(s);
+            // Console.WriteLine(s);
 #endif
         }
 
@@ -155,6 +172,11 @@ namespace AutoSerialize
                             continue;
                         }
                     }
+                }
+
+                if (isArray)
+                {
+                    throw new NotImplementedException("Non-Leftover Data");
                 }
 
                 var PreSerializeAtt = field.GetCustomAttribute<PreSerializeAttribute>();

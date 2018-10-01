@@ -3,9 +3,12 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AutoSerialize.Benchmark
 {
@@ -64,7 +67,7 @@ namespace AutoSerialize.Benchmark
         [Benchmark]
         public void AutoSerialize()
         {
-            for (int i = 0; i <= N; i++)
+            for (int i = 0; i < N; i++)
             using (Stream s = new MemoryStream())
             {
                 write(s, obj);
@@ -74,7 +77,7 @@ namespace AutoSerialize.Benchmark
         [Benchmark]
         public void DotNet()
         {
-            for (int i = 0; i <= N; i++)
+            for (int i = 0; i < N; i++)
             using (Stream s = new MemoryStream())
             {
                 formatter.Serialize(s, obj);

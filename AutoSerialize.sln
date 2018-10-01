@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoSerialize.Example", "Au
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoSerialize.TypeAccessors", "AutoSerialize.TypeAccessors\AutoSerialize.TypeAccessors.csproj", "{ECEFB782-E96B-4415-9D7B-DC4109AC74AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoSerialize.Benchmark", "AutoSerialize.Benchmark\AutoSerialize.Benchmark.csproj", "{853B70D5-84FC-4938-BB19-9FB9B2E12E9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoSerialize.Benchmark", "AutoSerialize.Benchmark\AutoSerialize.Benchmark.csproj", "{853B70D5-84FC-4938-BB19-9FB9B2E12E9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
